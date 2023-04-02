@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="actions">
+    <mat-slide-toggle
+      [checked]="inEditMode"
+      (change)="handleEditModeChange($event)"
+    >
+      Set Point of Interest
+    </mat-slide-toggle>
+    <h2>{{ model?.name }}</h2>
+    <a [routerLink]="['/', 'model']">Model Selection</a>
+    <!-- <app-camera-options
+      [options]="cameraOptions"
+      (optionsChange)="updateCameraOptions($event)"
+    ></app-camera-options> -->
+  </div>
+  <div id="canvas" (click)="handleClick($event)"></div>
+</div>

@@ -1,0 +1,38 @@
+#canvas {
+  height: calc(100vh - 150px);
+  width: calc(100vw - 40px);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  height: 90px;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+.container {
+  padding: 20px;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  transform: translate(-50% -50%);
+}
+
+.model-input {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+form {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}

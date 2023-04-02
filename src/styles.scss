@@ -1,1 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  padding: 0;
+  margin: 0;
+  color: white;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background-color: rgb(48, 48, 48);
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-card {
+  background-color: rgb(58, 58, 58);
+}
+
+mat-card-content {
+  background-color: rgb(48, 48, 48);
+  border-radius: 4px;
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 0px !important;
+}
+
+.mat-dialog-container {
+  background-color: rgb(48, 48, 48);
+}

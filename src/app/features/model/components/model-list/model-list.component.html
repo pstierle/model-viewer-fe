@@ -1,0 +1,36 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> Select a Model </mat-card-title>
+    </mat-card-header>
+
+    <div class="content">
+      <mat-card-content
+        *ngFor="let model of models$ | async"
+        [class.selected]="(selectedModel$ | async)?.id === model.id"
+      >
+        <button mat-button (click)="handleModelClick(model)">
+          {{ model.name }}
+        </button>
+      </mat-card-content>
+    </div>
+
+    <mat-card-actions align="end">
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="(selectedModel$ | async) === null"
+        (click)="handleEditModelClick()"
+      >
+        Edit Model
+      </button>
+      <button
+        mat-raised-button
+        (click)="handleUploadModelClick()"
+        color="primary"
+      >
+        Upload new Model
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

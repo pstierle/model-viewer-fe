@@ -1,0 +1,45 @@
+<div class="progress-bar" *ngIf="modelProgress">
+  <mat-progress-bar [value]="modelProgress"> </mat-progress-bar>
+</div>
+<div class="container">
+  <div class="actions">
+    <div class="model-input">
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        (click)="fileInput.click()"
+      >
+        Choose GLB File
+      </button>
+      <input
+        hidden
+        (change)="handleFileChange($event)"
+        #fileInput
+        type="file"
+        id="file"
+      />
+      <form [formGroup]="modelForm" (ngSubmit)="handleUploadModel()">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Model Name</mat-label>
+          <input matInput formControlName="name" name="name" required />
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!modelForm.valid || !selectedFile"
+        >
+          Upload Model
+        </button>
+      </form>
+    </div>
+
+    <!-- <app-camera-options
+      [options]="cameraOptions"
+      (optionsChange)="updateCameraOptions($event)"
+    ></app-camera-options> -->
+  </div>
+  <div id="canvas"></div>
+</div>

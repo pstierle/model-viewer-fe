@@ -1,0 +1,24 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Register</mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" name="name" required />
+      </mat-form-field>
+      <a [routerLink]="['/', appRoutes.auth, appRoutes.login]">login</a>
+
+      <button
+        mat-raised-button
+        color="primary"
+        color="primary"
+        type="submit"
+        [disabled]="!registerForm.valid"
+      >
+        Register
+      </button>
+    </form>
+  </mat-card>
+</div>

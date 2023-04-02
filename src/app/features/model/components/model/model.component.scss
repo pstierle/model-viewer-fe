@@ -1,0 +1,21 @@
+#canvas {
+  height: calc(100vh - 110px);
+  width: calc(100vw - 40px);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  width: 100%;
+  height: 60px;
+}
+
+h2 {
+  margin: 0;
+}
+
+.container {
+  padding: 20px;
+}

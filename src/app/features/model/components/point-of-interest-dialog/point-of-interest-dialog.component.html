@@ -1,0 +1,21 @@
+<form [formGroup]="pointOfInterestForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" name="name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="form-field">
+    <mat-label>Decription</mat-label>
+    <textarea
+      matInput
+      cdkTextareaAutosize
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="1"
+      formControlName="description"
+      name="description"
+      cdkAutosizeMaxRows="5"
+    ></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Save</button>
+</form>
