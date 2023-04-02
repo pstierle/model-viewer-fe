@@ -1,10 +1,9 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
 import { CameraOptions } from 'src/app/shared/models/camera-options';
 import { appRoutes } from 'src/app/shared/constants/app-routes-constant';
 import { StoreService } from 'src/app/core/services/store.service';
@@ -14,7 +13,7 @@ import { StoreService } from 'src/app/core/services/store.service';
   templateUrl: './model-upload.component.html',
   styleUrls: ['./model-upload.component.scss'],
 })
-export class ModelUploadComponent implements OnInit, AfterViewInit {
+export class ModelUploadComponent implements OnInit, AfterViewInit, OnDestroy {
   public cameraOptions: CameraOptions = {
     fov: 140,
     near: 1,
@@ -33,6 +32,8 @@ export class ModelUploadComponent implements OnInit, AfterViewInit {
   private controls!: OrbitControls;
   public camera!: THREE.PerspectiveCamera;
   public pauseAnimation = false;
+  private light!: THREE.AmbientLight;
+  private animationHandler: number | null = null;
 
   private get modelContainer(): HTMLElement | null {
     return document.getElementById('canvas');
@@ -51,6 +52,12 @@ export class ModelUploadComponent implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> {
     window.addEventListener('focus', () => (this.pauseAnimation = false));
     window.addEventListener('blur', () => (this.pauseAnimation = true));
+  }
+
+  public ngOnDestroy(): void {
+    if (this.animationHandler) {
+      cancelAnimationFrame(this.animationHandler);
+    }
   }
 
   public handleFileChange(event: any) {
@@ -78,6 +85,11 @@ export class ModelUploadComponent implements OnInit, AfterViewInit {
     this.camera.updateProjectionMatrix();
   }
 
+  private createLight() {
+    this.light = new THREE.AmbientLight(0x404040);
+    this.scene.add(this.light);
+  }
+
   private createCamera() {
     this.camera = new THREE.PerspectiveCamera(
       this.cameraOptions.fov,
@@ -88,14 +100,15 @@ export class ModelUploadComponent implements OnInit, AfterViewInit {
     this.camera.position.z = 4;
   }
 
-  private clearScence() {
-    while (this.scene.children.length) {
-      this.scene.remove(this.scene.children[0]);
+  private clearModel() {
+    const model = this.scene.children.find((child) => child.name === 'MODEL');
+    if (model) {
+      this.scene.remove(model);
     }
   }
 
   private loadModel(url: string) {
-    this.clearScence();
+    this.clearModel();
     const loader = new GLTFLoader();
     loader.load(
       url,
@@ -106,7 +119,7 @@ export class ModelUploadComponent implements OnInit, AfterViewInit {
           }
         });
         gltf.scene.name = 'MODEL';
-        gltf.scene.scale.multiplyScalar(5);
+        gltf.scene.scale.multiplyScalar(2);
         this.scene.add(gltf.scene);
         const object = this.scene.children.find(
           (child) => child.name === 'MODEL'
@@ -144,18 +157,13 @@ export class ModelUploadComponent implements OnInit, AfterViewInit {
     this.createRenderer();
     this.createScene();
     this.createControls();
+    this.createLight();
     this.animate();
   }
 
   private createScene() {
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0.8, 0.8, 0.8);
-    const environment = new RoomEnvironment();
-    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-
-    this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xbbbbbb);
-    this.scene.environment = pmremGenerator.fromScene(environment).texture;
   }
 
   private createControls() {
@@ -177,7 +185,7 @@ export class ModelUploadComponent implements OnInit, AfterViewInit {
       this.controls.update();
     }
 
-    requestAnimationFrame(() => {
+    this.animationHandler = requestAnimationFrame(() => {
       this.animate();
     });
   }

@@ -3,7 +3,6 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
 import { StoreService } from 'src/app/core/services/store.service';
 import { CameraOptions } from 'src/app/shared/models/camera-options';
 import * as THREE from 'three';
@@ -37,6 +36,7 @@ export class ModelComponent implements OnInit, AfterViewInit, OnDestroy {
   private pointer!: THREE.Vector2;
   private intersectingPoint: THREE.Vector3 | null = null;
   private hoveredObject: THREE.Object3D<THREE.Event> | null = null;
+  private light!: THREE.AmbientLight;
 
   private get modelContainer(): HTMLElement | null {
     return document.getElementById('canvas');
@@ -141,7 +141,7 @@ export class ModelComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         });
         gltf.scene.name = 'MODEL';
-        gltf.scene.scale.multiplyScalar(5);
+        gltf.scene.scale.multiplyScalar(2);
         this.scene.add(gltf.scene);
         const object = this.scene.children.find(
           (child) => child.name === 'MODEL'
@@ -182,6 +182,7 @@ export class ModelComponent implements OnInit, AfterViewInit, OnDestroy {
     this.createRenderer();
     this.createScene();
     this.createControls();
+    this.createLight();
     this.animate();
   }
 
@@ -191,15 +192,14 @@ export class ModelComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  private createLight() {
+    this.light = new THREE.AmbientLight(0x404040);
+    this.scene.add(this.light);
+  }
+
   private createScene() {
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0.8, 0.8, 0.8);
-    const environment = new RoomEnvironment();
-    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-
-    this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xbbbbbb);
-    this.scene.environment = pmremGenerator.fromScene(environment).texture;
   }
 
   private createControls() {
@@ -220,8 +220,6 @@ export class ModelComponent implements OnInit, AfterViewInit, OnDestroy {
       this.renderer.render(this.scene, this.camera);
       this.controls.update();
     }
-    console.log('render');
-
     this.animationHandler = requestAnimationFrame(() => {
       this.animate();
     });

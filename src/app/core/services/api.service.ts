@@ -9,8 +9,8 @@ import { PointOfInterest } from '../../shared/models/point-of-interest';
   providedIn: 'root',
 })
 export class ApiService {
-  private readonly baseApiUrl = 'http://localhost:3000';
-  //private readonly baseApiUrl = 'http://192.168.178.26:3000';
+  //private readonly baseApiUrl = 'http://localhost:3000';
+  private readonly baseApiUrl = 'http://192.168.178.26:3000';
 
   constructor(private http: HttpClient) {}
 

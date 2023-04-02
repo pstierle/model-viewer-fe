@@ -23,7 +23,7 @@ export class RegisterComponent {
   public async onRegisterSubmit(): Promise<void> {
     const name = this.registerForm.getRawValue().name;
     if (name) {
-      await this.store.login(name);
+      await this.store.register(name);
     }
   }
 }
